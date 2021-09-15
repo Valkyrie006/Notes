@@ -124,14 +124,12 @@ programs in a convenient and efficient manner.
         - Increased responsiveness(no user is left idle)
         - Less cost
 
-
 # Process Management
-
 ### Process
 - A process(**job**) is a program in execution
-- Process is an ‘active’ entity, while program is a ‘passive’ entity.
+- Process is an ‘active’ entity, while program is a ‘passive’ entity
 - Example
-    - When we write a program in C++ and compile it, the compiler creates binary code. The original code and binary code are both programs. When we actually run the binary code, it becomes a process.
+    - When we write a program in C++ and compile it, the compiler creates binary code. The original code and binary code are both programs. When we actually run the binary code, it becomes a process
 
 ### Process States
 ![Process States 5 state model](/assets/OS/process_state_5_state_model.png) 
@@ -141,32 +139,29 @@ programs in a convenient and efficient manner.
     - Program which is present in secondary memory that will be picked up by OS to create the process
 2. Ready 
     - New -> Ready to run
-    - After the creation of a process, the process enters the ready state i.e. the process is loaded into the main memory(RAM). 
-    - Process here is ready to run and is waiting to get the CPU time for its execution. Processes that are ready for execution by the CPU are maintained in a queue for ready processes.
+    - After the creation of a process, the process enters the ready state i.e. the process is loaded into the main memory(RAM).
+    - Process here is ready to run and is waiting to get the CPU time for its execution. Processes that are ready for execution by the CPU are maintained in a queue for ready processes
 3. Run 
     - Process is chosen by CPU for execution and the instructions within the process are executed by anyone of the available CPU cores
 4. Blocked or wait 
     - Whenever the process requests access to I/O or needs input from the user or needs access to a critical region(the lock for which is already acquired), it enters the blocked or waits for the state
-    - The process continues to wait in the main memory and does not require CPU. Once the I/O operation is completed the process goes to the ready state.
+    - The process continues to wait in the main memory and does not require CPU. Once the I/O operation is completed the process goes to the ready state
 5. Terminated or completed 
     - Process is killed(deallocated) as well as PCB is deleted
 6. Suspend ready 
-    - Process that was initially in the ready state but were swapped out of main memory(refer Virtual Memory topic) and placed onto external storage by scheduler are said to be in suspending ready state. The process will transition back to ready state whenever the process is again brought onto the main memory. Linux uses swap space and partition to do this task.
-
+    - Process that was initially in the ready state but were swapped out of main memory(refer Virtual Memory topic) and placed onto external storage by scheduler are said to be in suspending ready state. The process will transition back to ready state whenever the process is again brought onto the main memory. Linux uses swap space and partition to do this task
 7. Suspend wait or suspend blocked 
-    - Similar to suspend ready but uses the process which was performing I/O operation and lack of main memory caused them to move to secondary memory.
-    - When work is finished it may go to suspend ready.
+    - Similar to suspend ready but uses the process which was performing I/O operation and lack of main memory caused them to move to secondary memory
+    - When work is finished it may go to suspend ready
 
 ### Process Management - Process Scheduling
 - CPU and IO Bound Processes 
     - If the process is intensive in terms of CPU operations then it is called the CPU bound process. If the process is intensive in terms of I/O operations then it is called IO bound process.
 - Types of process scheduler
-
     1. Long Term or job scheduler 
         - It brings the new process to the 'Ready State'. 
         - It controls Degree of Multi-programming, i.e., number of process present in ready state at any point of time.
         - It is important that the long-term scheduler make a careful selection of both IO and CPU bound processes.
-
     2. Short term or CPU scheduler
         - It is responsible for selecting one process from ready state for scheduling it on the running state.
         - Short-term scheduler only selects the process to schedule it doesn't load the process on running.
@@ -174,30 +169,23 @@ programs in a convenient and efficient manner.
             - Switching context
             - Switching to user mode
             - Jumping to the proper location in the newly loaded program
-
     3. Medium-term scheduler 
         - It is responsible for suspending and resuming the process. It mainly does swapping (moving processes from main memory to disk and vice versa)
         - Swapping may be necessary to improve the process mix or because a change in memory requirements has overcommitted available memory, requiring memory to be freed up
-
 - Multiprogramming 
     - We have many processes ready to run
     - Types of multiprogramming:
         1. Pre-emption (or time sharing or multitasking)
             - Process is forcefully removed from CPU
-
         2. Non pre-emption 
-            - Processes are not removed until they complete the execution.
-
+            - Processes are not removed until they complete the execution
 - Degree of multiprogramming 
     - Number of processes that can reside in the ready state at maximum decides the degree of multiprogramming, e.g., if the degree of programming = 100 means 100 processes can reside in the ready state at maximum.
-
     - Types of queues of processes:
         1. Ready Queue
             - Set of all processes that are in main memory and are waiting for CPU time is kept in the ready queue.
-
         2. Job Queue
             - Each new process goes into the job queue. Processes in the job queue reside on mass storage and await the allocation of main memory.
-
         3. Waiting (Device) Queues
             - Set of processes waiting for allocation of certain I/O devices is kept in the waiting (device) queue
             - The short-term scheduler (also known as CPU scheduling) selects a process from the ready queue and yields control of the CPU to the process
@@ -208,12 +196,10 @@ programs in a convenient and efficient manner.
         - Mode of operation in which critical OS procedures run. Only privileged instructions such as: Handling Interrupts, Process Management, I/O Management are allowed to run
         - This is to ensure that no user application is able to tamper or cause a glitch in core-OS tasks, thus preventing any critical error which may cause the system to crash
         - When OS boots, it begins execution in kernel-mode only. All user applications which are loaded afterwards are run on User Mode
-    
     2. User Mode
         - All user applications and high-level programs are run in User Mode so that they don't mess up with the critical OS procedures
         - However, sometimes a user application may require access to low-level utilities such as I/O peripherals, File System (Hard-drives), etc. For that, it requires the OS to switch from the User Mode of execution to Kernel Mode. The way of switching is done via **System Calls**
         ![User Mode](/assets/OS/user_mode.jpeg)
-
 - Types of system calls
     1. Process control: end, abort, create, terminate, allocate and free memory
     2. File management: create, open, read, write, delete file
@@ -221,7 +207,6 @@ programs in a convenient and efficient manner.
     4. Information maintenance: getpid, alarm, sleep
     5. Communication: pipe
     6. Protection: chmod(set file security)
-    
 - fork
     - Fork system call is used to create a child process
     - It is a special function in the fact that this system call has a conditional return value:
@@ -241,47 +226,39 @@ programs in a convenient and efficient manner.
     - A register set
     - A stack space
 - Threads are not independent of each other as they share the code, data, OS resources, etc.
-
 - Similarity between Threads and Processes -
     - Only one thread or process is active at a time
     - Within process both execute sequentially
     - Both can create children
-
 - Differences between Threads and Processes -
     - Process have system calls involved, Threads don't have that
     - Threads are not independent, processes are
     - Threads are designed to assist each other, processes may or may not do it
     - Context switching: Faster in Thread, Slower in process
     - Blocking: If we block one process then other process aren't blocked but when we block one thread then all other threads are blocked as CPU blocks entire process
-
 - Types of Threads
     1. User Level thread (ULT)
         - It is implemented in the user level library, they are not created using the system calls
         - Thread switching does not need to call OS and to cause an interrupt to Kernel. The kernel doesn't know about the user level thread and manages them as if they were single-threaded processes.
-
         - Advantages of ULT
             - Can be implemented on an OS that does't support multithreading.
             - Simple representation since thread has only program counter, register set, stack space.
             - Simple to create since no intervention of kernel
             - Thread switching is fast since no OS calls need to be made.
-
-
         - Disadvantages of ULT
             - If one thread causes a page fault, the entire process blocks.
 
     2. Kernel Level Thread (KLT)
         - Kernel knows and manages the threads. Instead of thread table in each process, the kernel itself has thread table (a master one) that keeps track of all the threads in the system. In addition kernel also maintains the traditional process table to keep track of the processes
         - OS kernel provides system call to create and manage threads.
-
         - Advantages of KLT -
             - Since kernel has full knowledge about the threads in the system, scheduler may decide to give more time to processes having large number of threads.
             - Good for applications that frequently block.
-
-
         - Disadvantages of KLT -
             - Slow and inefficient
             - It requires thread control block so it is an overhead
 
+# Process Scheduling
 ### Types of time for CPU scheduling
 1. Arrival Time
     - Time at which the process arrives in the ready queue
@@ -290,10 +267,97 @@ programs in a convenient and efficient manner.
 3. Burst Time
     - Time required by a process for CPU execution
 4. Turn Around Time
-    - Time Difference between completion time and arrival time
     - Turn Around Time = Completion Time - Arrival Time
 5. Waiting Time(W.T)
-    - Time Difference between turn around time and burst time
     - Waiting Time = Turn Around Time - Burst Time
 6. Response Time
-    - Time difference between arrival time and the first time the process gets CPU
+    - Response Time = Time at which the process gets the CPU for the first time - Arrival time
+
+### Scheduling Algorithms
+1. First Come First Serve (FCFS)
+    - Criteria: Minimum arrival time first
+    - Mode: Non-Pre-emptive
+    - FIFO(First in First Out) queue
+    - Advantage:
+        - Simple, easy to implement
+    - Disadvantage:
+        - Average waiting time not optimal
+        - Convoy Effect - Whole OS slows down due to a few slow processes(due to FCFS)
+
+    ![FCFS Question](/assets/OS/FCFS_Question.png)
+    ![FCFS Grantt Chart](/assets/OS/FCFS_GranttChart.png)
+    ![FCFS Answer](/assets/OS/FCFS_Answer.png)   
+2. Shortest-Job-First (SJF)
+    - Criteria: Minimum arrival time first and then burst time second in case of clash
+    - Mode: Non-Pre-emptive
+    - Advantage:
+        - Minimum average waiting time
+    - Disadvantage:
+        - Starvation
+        - Impractical as not possible to calculate burst time in advance
+
+    ![SJF Question](/assets/OS/SJF_Question.png)
+    ![SJF Grantt Chart](/assets/OS/SJF_GranttChart.png)
+    ![SJF Answer](/assets/OS/SJF_Answer.png)
+3. Shortest Remaining Time First (SRTF)
+    - Criteria: Minimum arrival time first and then burst time second in case of clash(Burst Time)
+    - Mode: Pre-emptive(Move only 1 unit of time and check)
+    - Advantage:
+        - Short processes are handled very quickly
+        - Less overhead since it only makes a decision when a process completes or a new process is added
+    - Disadvantage:
+        - Starvation
+        - Impractical since it is not possible to know the burst time of every process in ready queue in advance.
+
+    ![SRTF Question](/assets/OS/SRTF_Question.png)
+    ![SRTF Grantt Chart](/assets/OS/SRTF_GranttChart.png)
+    ![SRTF Answer](/assets/OS/SRTF_Answer.png)
+
+4. Round Robin Scheduling
+    - Criteria: Time Quantum
+    - Mode: Pre-emptive
+    - Advantage: No need for calculating burst time
+    - Disadvantage: Overhead due to context switching
+    - Example: Following is solved for time quantum = 2, Make ready queue according to arrival time and then after completing a time quantum first put arrived process in ready queue and then put completed process(context switching after time quantum(except at end of last process and beginning of start process))
+
+    ![Round Robin Question](/assets/OS/RoundRobin_Question.png)
+    ![Round Robin Grantt Chart](/assets/OS/RoundRobin_GranttChart.png)
+    ![Round Robin Answer](/assets/OS/RoundRobin_Answer.png)
+
+5. Priority Scheduling
+    - Criteria: Priority(Process with the highest priority is to be executed first and so on. Processes with the same priority are executed on the FCFS scheme)
+    - Mode: Non-pre-emptive/Pre-emptive
+    - A major problem with priority scheduling is indefinite blocking or **Starvation**. A solution to the problem of indefinite blockage of the low-priority process is **ageing**. Aging is a technique of gradually increasing the priority of processes that wait in the system for a long period of time
+    - Example - For pre-emptive(Move only 1 unit of time and check)
+
+    ![Priority Scheduling Question](/assets/OS/PriorityScheduling_Question.png)
+    ![Priority Scheduling Grantt Chart](/assets/OS/PriorityScheduling_GranttChart.png)
+    ![Priority Scheduling Answer](/assets/OS/PriorityScheduling_Answer.png)
+
+6. Multilevel Queue Scheduling
+    - System processes are of the highest priority (extremely critical), then comes Interactive(Foreground) processes followed by Batch(Background) and Student processes
+    - Each process have different ready queue, scheduling algorithms, priority
+    - Scheduling among queues
+        1. **Fixed priority preemptive scheduling method** - Each queue has absolute priority over lower priority queue
+        2. **Time slicing** - In this method each queue gets certain portion of CPU time and can use it to schedule its own processes
+    - Disadvantage: Starvation
+
+7. Multilevel Feedback Queue Scheduling
+    - Modification to the MLQ (Multilevel-Queue) which allows processes to move between queues. It keeps analyzing the behavior (time of execution) of processes, according to which it changes its priority
+
+# Process Synchronization
+
+### Types of Process(on basis of synchronization)
+1. Independent Process
+    - Execution of one process does not affect the execution of other processes
+    - Each process have their own address space and they don't require to communicate with other processes
+2. Cooperative Process
+    - Execution of one process affects the execution of other processes
+    - Resources are shared between process
+
+### Race Condition
+- Several processes access and process the manipulations over the same data concurrently, then the outcome depends on the particular order in which the access takes place
+
+### Producer Consumer problem
+- 
+
