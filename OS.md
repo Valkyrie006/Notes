@@ -346,7 +346,7 @@ programs in a convenient and efficient manner.
     - Modification to the MLQ (Multilevel-Queue) which allows processes to move between queues. It keeps analyzing the behavior (time of execution) of processes, according to which it changes its priority
 
 # Process Synchronization
-
+- Process synchronization problem arises in the case of Cooperative process also because resources are shared in Cooperative processes
 ### Types of Process(on basis of synchronization)
 1. Independent Process
     - Execution of one process does not affect the execution of other processes
@@ -358,6 +358,56 @@ programs in a convenient and efficient manner.
 ### Race Condition
 - Several processes access and process the manipulations over the same data concurrently, then the outcome depends on the particular order in which the access takes place
 
+### Critical Condition
+- It is a code segment that can be accessed by only one process at a time. It contains shared variables which need to be synchronized to maintain consistency of data variables.
+- Parts of Critical Section
+    - Entry Section
+        - It is part of the process which decides the entry of a particular process in the Critical Section, out of many other processes
+    - Exit Section
+        - This process allows the other process that is waiting in the Entry Section, to enter into the Critical Sections. It checks that a process that after a process has finished execution in Critical Section can be removed through this Exit Section
+    - Remainder Section
+        - The other parts of the Code other than Entry Section, Critical Section and Exit Section is known as Remainder Section
+- Conditions of synchronization
+    1. Mutual Exclusion (Primary/Mandatory)
+        - If a process is executing in its critical section, then no other process is allowed to execute in the critical section.
+
+    2. Progress (Primary)
+        - If no process is in its critical section, and if one or more threads want to execute their critical section then any one of these threads must be allowed to get into its critical section
+
+    3. Bounded Waiting (Secondary)
+        - After a process makes a request for getting into its critical section, there is a limit for how many other processes can get into their critical section, before this process's request is granted. So after the limit is reached, the system must grant the process permission to get into its critical section.
+
+    4. Performance (Secondary)
+        - The mechanism that allows only one process to enter the critical section should be fast. This mechanism is referred to as the locking mechanism and can be implemented in two ways, hardware or software mechanism. The hardware-based mechanism is generally faster since it only involves the registers.
+
+### Solutions for Process Synchronization
+1. Lock Variable
+    - (LOCK = {0, 1} => 0 for if process not in critical section)
+    - Executed in User Mode
+    - Multiprocess Solution
+    - No Mutual Exclusion 
+
+2. Test and Set (Same as Lock variable)
+    - Here, the shared variable is lock which is initialized to false
+    - TestAndSet(lock) algorithm 
+        - It always returns whatever value is sent to it and sets lock to true. The first process will enter the critical section at once as TestAndSet(lock) will return false and it’ll break out of the while loop. The other processes cannot enter now as lock is set to true and so the while loop continues to be true. Mutual exclusion is ensured. Once the first process gets out of the critical section, lock is changed to false. So, now the other processes can enter one by one. Progress is also ensured. However, after the first process any process can go in. There is no queue maintained, so any new process that finds the lock to be false again, can enter. So bounded waiting is not ensured. 
+    - ``` C++
+        //Shared variable lock initialized to false
+        boolean lock;
+
+        boolean TestAndSet (boolean &target){
+            boolean rv = target;
+            target = true;
+            return rv;
+        }
+
+        while(1){
+            while (TestAndSet(lock));
+            critical section
+            lock = false;
+            remainder section
+        }
+        ```
 ### Producer Consumer problem
-- 
+- We have a buffer of fixed size. A producer can produce an item and can place in the buffer. A consumer can pick items and can consume them. We need to ensure that when a producer is placing an item in the buffer, then at the same time consumer should not consume any item. In this problem, buffer is the critical section.
 
