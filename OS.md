@@ -447,8 +447,109 @@ programs in a convenient and efficient manner.
             - Follows mutual exclusion
             - Portability is there
             - Busy waiting
-### Producer Consumer problem
-- Problem:
+### Producer Consumer problem (counting semaphore)
+- Problem
     - We have a buffer of fixed size. A producer can produce an item and can place in the buffer. A consumer can pick items and can consume them
     - In this problem, buffer is the critical section
+- Solution
+    - We need two counting semaphores – Full and Empty. “Full” keeps track of number of items in the buffer at any given time and “Empty” keeps track of number of unoccupied slots
+    - ``` C++
+        // Initialization of semaphores
+        mutex = 1
+        Full = 0 // Initially, all slots are empty. Thus full slots are 0
+        Empty = n // All slots are empty initially
 
+        // Solution for Producer
+        do{
+            //produce an item
+            wait(empty);
+            wait(mutex);
+            //place in buffer
+            signal(mutex);
+            signal(full);
+        }while(true);
+
+        // Solution for Consumer
+        do{
+            wait(full);
+            wait(mutex);
+            // remove item from buffer
+            signal(mutex);
+            signal(empty);
+            // consumes item
+        }while(true);
+      ```
+
+### Reader-Writer Problem (Binary Semaphore)
+- Problem
+    - In case when we can't change file/data while other person is reading or writing
+    - Allowed -> R-R
+    - Not allowed -> R-W, W-R, W-W
+- Solution 
+    - Binary Semaphore
+    - ``` C++
+        // Initialization
+        semaphore mutex, wrt; // semaphore mutex is used to ensure mutual exclusion when readcnt is updated i.e. when any reader enters or exit from the critical section and semaphore wrt is used by both readers and writers
+        int readcnt;  //    readcnt tells the number of processes performing read in the critical section, initially 0
+
+        // Writer process
+        do {
+            // writer requests for critical section
+            wait(wrt);  
+            // performs the write
+            // leaves the critical section
+            signal(wrt);
+        } while(true);
+
+        // Reader process
+        do {
+            // Reader wants to enter the critical section
+            wait(mutex);
+            // The number of readers has now increased by 1
+            readcnt++;                          
+            // there is atleast one reader in the critical section
+            // this ensure no writer can enter if there is even one reader
+            // thus we give preference to readers here
+            if (readcnt==1)     
+                wait(wrt);                    
+            // other readers can enter while this current reader is inside 
+            // the critical section
+            signal(mutex);                   
+            // current reader performs reading here
+            wait(mutex);   // a reader wants to leave
+            readcnt--;
+            // that is, no reader is left in the critical section,
+            if (readcnt == 0) 
+                signal(wrt);         // writers can enter
+            signal(mutex); // reader leaves
+        } while(true);
+      ```
+
+### Dining Philosopher Problem (Binary Semaphore)
+- Problem 
+    - K philosophers seated around a circular table with one chopstick between each pair of philosophers(total K chopsticks). There is one chopstick between each philosopher. A philosopher may eat if he can pick up the two chopsticks adjacent to him. One chopstick may be picked up by any one of its adjacent followers but not both
+- Solution
+    - ``` C++
+        // Initialize semaphore
+        semaphore chopstick [K];
+        // Initially the elements of the chopstick are initialized to 1 as the chopsticks are on the table and not picked up by a philosopher
+
+        // Structure of a philosopher i
+        do {
+            wait( chopstick[i] );
+            wait( chopstick[ (i+1) % K] );
+            . .
+            . EATING THE RICE
+            .
+            signal( chopstick[i] );
+            signal( chopstick[ (i+1) % K] );
+            .
+            . THINKING
+            .
+        } while(1);
+      ```
+    - Problem -> Deadlock => If all philosophers pick their left chopstick simultaneously. Then none of them can eat and deadlock occurs.
+    - Solve
+        - At most (K - 1) philosophers at table [Not appropriate]
+        - Even philosopher should pick right chopstick, and then left chopstick while an odd philosopher should pick left chopstick and then right chopstick
+        - A philosopher should only be allowed to pick their chopstick if both are available at the same time
