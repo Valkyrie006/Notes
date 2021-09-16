@@ -370,14 +370,11 @@ programs in a convenient and efficient manner.
 - Conditions of synchronization
     1. Mutual Exclusion (Primary/Mandatory)
         - If a process is executing in its critical section, then no other process is allowed to execute in the critical section.
-
     2. Progress (Primary)
         - If no process is in its critical section, and if one or more threads want to execute their critical section then any one of these threads must be allowed to get into its critical section
-
     3. Bounded Waiting (Secondary)
         - After a process makes a request for getting into its critical section, there is a limit for how many other processes can get into their critical section, before this process's request is granted. So after the limit is reached, the system must grant the process permission to get into its critical section.
-
-    4. Performance (Secondary)
+    4. Performance/Portability (Secondary)
         - The mechanism that allows only one process to enter the critical section should be fast. This mechanism is referred to as the locking mechanism and can be implemented in two ways, hardware or software mechanism. The hardware-based mechanism is generally faster since it only involves the registers.
 
 ### Solutions for Process Synchronization
@@ -386,8 +383,12 @@ programs in a convenient and efficient manner.
     - Executed in User Mode
     - Multiprocess Solution
     - No Mutual Exclusion 
-
-2. Test and Set (Same as Lock variable)
+    - ``` C++
+        Entry section - while(lock != 0);
+                        Lock = 1;
+        //critical section
+        Exit section - Lock = 0;```
+2. Test and Set (Same as Lock variable) [Hardware Mode]
     - Here, the shared variable is lock which is initialized to false
     - TestAndSet(lock) algorithm 
         - It always returns whatever value is sent to it and sets lock to true. The first process will enter the critical section at once as TestAndSet(lock) will return false and it’ll break out of the while loop. The other processes cannot enter now as lock is set to true and so the while loop continues to be true. Mutual exclusion is ensured. Once the first process gets out of the critical section, lock is changed to false. So, now the other processes can enter one by one. Progress is also ensured. However, after the first process any process can go in. There is no queue maintained, so any new process that finds the lock to be false again, can enter. So bounded waiting is not ensured. 
@@ -408,6 +409,46 @@ programs in a convenient and efficient manner.
             remainder section
         }
         ```
+3. Turn Variable (Strict Alteration)
+    - User Mode
+    - Only for 2 processes
+    - Same as lock but instead of 0 or 1 we use turn == pid of process then only process run
+    - Mutual Exclusion is there
+    - Progress not guaranteed
+    - Bounded Waiting is there
+    - Portability is there
+4. Semaphore
+    - Semaphore => Integer variable
+    - Types of Semaphore
+        1. Counting Semaphore
+            - s can be any value (s = count of processes that can run at a time)
+            - For multiple process
+            - No mutual Exclusion
+            - ``` C++
+                // While entering critical condition -> wait, down, P
+                void wait(int s) {
+                    s--;
+                    // No resource available
+                    if(s < 0) {
+                        // Add process to blocked queue and sleep
+                    } 
+                }
+                // While exiting -> signal, up, V
+                void signal(int s) {
+                    s++;
+                    if(s <= 0) {
+                        // Remove from blocked
+                    }
+                }
+                ```
+        2. Binary Semaphore (Mutex Lock)
+            - s can be 0 or 1 (initially 1)
+            - The wait operation only works when the semaphore is 1 and the signal operation succeeds when semaphore is 0
+            - Follows mutual exclusion
+            - Portability is there
+            - Busy waiting
 ### Producer Consumer problem
-- We have a buffer of fixed size. A producer can produce an item and can place in the buffer. A consumer can pick items and can consume them. We need to ensure that when a producer is placing an item in the buffer, then at the same time consumer should not consume any item. In this problem, buffer is the critical section.
+- Problem:
+    - We have a buffer of fixed size. A producer can produce an item and can place in the buffer. A consumer can pick items and can consume them
+    - In this problem, buffer is the critical section
 
