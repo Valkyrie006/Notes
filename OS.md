@@ -553,3 +553,86 @@ programs in a convenient and efficient manner.
         - At most (K - 1) philosophers at table [Not appropriate]
         - Even philosopher should pick right chopstick, and then left chopstick while an odd philosopher should pick left chopstick and then right chopstick
         - A philosopher should only be allowed to pick their chopstick if both are available at the same time
+
+# Deadlock
+- Situation where a set of processes are blocked because each process is holding a resource and waiting for another resource acquired by some other process
+- Example
+
+    ![Deadlock Example](/assets/OS/deadlock_example.png)
+### Conditions for deadlock(Necessary conditions)
+1. Mutual Exclusion: One or more than one resource are non-sharable (Only one process can use at a time)
+2. Hold and Wait: A process is holding at least one resource and waiting for resources
+3. No Preemption: A resource cannot be taken from a process unless the process releases the resource
+4. Circular Wait: A set of processes are waiting for each other in circular form.
+### Resource Allocation Graph (RAG)
+- It gives us what is the state of the system in terms of processes and resources
+- Components of RAG
+    1. Vertex
+    ![RAG Vertex](/assets/OS/RAG_vertex.jpeg)
+    2. Edge
+    ![RAG Edge](/assets/OS/RAG_edge.jpeg)
+### Cases of Deadlock
+1. Single Resource Instance
+    - Cycle in single-instance resource type is the sufficient condition for deadlock
+    ![Deadlock in Single Resource Instance Example 1](/assets/OS/deadlock_singleResourceInstance_Example1.jpeg)
+    ![Deadlock in Single Resource Instance Example 2](/assets/OS/deadlock_singleResourceInstance_Example2.jpeg)
+2. Multiple Resource Instance
+    - Construct Allocation and Request Matrix
+    - Example 1
+        ![Deadlock in Multiple Resource Instance Example 1 RAG](/assets/OS/deadlock_multipleResourceInstance_Example1_RAG.jpeg)
+        ![Deadlock in Multiple Resource Instance Example 1 Matrix](/assets/OS/deadlock_multipleResourceInstance_Example1_Matrix.jpeg)
+        - Allocation matrix
+            - For constructing allocation matrix, just go to resources and see to which process it is allocated
+            - R1 is allocated to P1, therefore write 1 in allocation matrix and similarly, R2 is allocated to P2 as well as P3 and for the remaining element just write 0
+        - Request matrix
+            - In order to find out request matrix, you have to go to process and see outgoing edges
+            - P1 is requesting resource R2, so write 1 in matrix and similarly, P2 requesting R1 and for remaining element write 0
+        - So now available resource is = (0, 0)
+        - Checking deadlock (safe or not)
+            ![Deadlock in Multiple Resource Instance Example 1 Checking Deadlock](/assets/OS/deadlock_multipleResourceInstance_Example1_CheckingDeadlock.jpeg)
+        - So, there is no deadlock in this RAG. Even though there is a cycle, still there is no deadlock. Therefore in multi-instance resource cycle is not sufficient condition for deadlock
+    - Example 2
+        ![Deadlock in Multiple Resource Instance Example 2 RAG](/assets/OS/deadlock_multipleResourceInstance_Example2_RAG.jpeg)
+        ![Deadlock in Multiple Resource Instance Example 2 Matrix](/assets/OS/deadlock_multipleResourceInstance_Example2_Matrix.jpeg)
+        - So, Available resource is = (0, 0), but requirement are (0, 1), (1, 0) and (1, 0).So you can't fulfill any one requirement.Therefore, it is in deadlock
+
+### Deadlock Handling
+1. Deadlock Ignorance (Ostrich Method)
+    - If the deadlock is very rare, then let it happen and reboot the system. This is the approach that both Windows and UNIX take.
+2. Deadlock Detection and Recovery
+    - Let deadlock occur, then do preemption to handle it once occurred
+3. Deadlock Prevention
+    - OS accepts all sent requests. Idea is to not to send a request that might lead to a deadlock condition
+    - Can be done after avoiding any condition of deadlock
+        1. No Mutual Exclusion 
+            - Not possible to do it as some resource like printer are always non-shareable
+        2. Preemption 
+            - Preempt resources from process when resources required by other high priority processes
+        3. No Hold and Wait 
+            - Allocate all required resources to the process before the start of its execution, this way hold and wait condition is eliminated but it will lead to low device utilization
+            - Process will make a new request for resources after releasing the current set of resources. This solution may lead to starvation
+        4. No circular wait
+            - Each resource will be assigned with a numerical number. A process can request resources only in increasing order of numbering
+4. Deadlock Avoidance
+    - OS very carefully accepts requests and checks whether if any request can cause deadlock and if process leads to deadlock, the process is avoided
+    - ***Banker's Algorithm***
+        - Used for deadlock avoidance and detection
+        - Data Structures used
+            - Available- A vector of length m indicates number of available resources of each type
+            - Allocation- An n*m matrix defines number of resources of each type currently allocated to a process. Column represents resource and resource represent process.
+            - Request- An n*m matrix indicates the current request of each process. If request[i][j] equals k then process Pi is requesting k more instances of resource type Rj
+        - Steps of Algorithm
+            1. Let Work and Finish be vectors of length m and n respectively. Initialize Work=Available. For i=0, 1, ...., n-1, if Allocation[i] = 0, then Finish[i] = true; otherwise, Finish[i]= false.
+            2. Find an index i such that both
+            a) Finish[i] == false b) Request[i] <= Work If no such i exists go to step 4.
+            3. Work= Work+ Allocation[i] Finish[i]= true Go to Step 2.
+            4. If Finish[i]== false for some i, 0<=i<n, then the system is in a deadlocked state. Moreover, if Finish[i]==false the process Pi is deadlocked.
+        - Example
+
+            ![deadlock Banker's Algorithm Question](/assets/OS/deadlock_Banker'sAlgorithm_Question.png)
+            ![deadlock Banker's Algorithm Need](/assets/OS/deadlock_Banker'sAlgorithm_Need.png)
+            ![deadlock Banker's Algorithm Safe state](/assets/OS/deadlock_Banker'sAlgorithm_SafeState.png)
+            
+
+
+
