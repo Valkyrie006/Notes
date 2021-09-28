@@ -632,7 +632,40 @@ programs in a convenient and efficient manner.
             ![deadlock Banker's Algorithm Question](/assets/OS/deadlock_Banker'sAlgorithm_Question.png)
             ![deadlock Banker's Algorithm Need](/assets/OS/deadlock_Banker'sAlgorithm_Need.png)
             ![deadlock Banker's Algorithm Safe state](/assets/OS/deadlock_Banker'sAlgorithm_SafeState.png)
-            
+
+# Memory Management
+
+### Memory Mangement Techniques
+![Memory Management Techniuqes](/assets/OS/memoryManagement_techniques.png)
+- Static or Fixed Partitioning Technique (Contiguous)
+    - In this partitioning, a number of partitions (non-overlapping) in RAM is fixed but the size of each partition may or may not be same. Here partition is made before execution or during system configure
+    - Types of Static Technique
+        1. Equal Size Memory Allocation: In this technique, fixed memory size is allocated to each process
+        2. Unequal Size Memory allocation: This technique is used to reduce memory loss in comparison to the equal size memory allocation
+    - Fragmentation
+        - Occurs in a dynamic memory allocation system when many of the free blocks are too small to satisfy any request
+        - Types of Fragmentation 
+            1. External Fragmentation: External Fragmentation happens when a dynamic memory allocation algorithm allocates some memory and a small piece is left over that cannot be effectively used. If too much external fragmentation occurs, the amount of usable memory is drastically reduced. Total memory space exists to satisfy a request, but it is not contiguous.
+            2. Internal Fragmentation: Internal fragmentation is the space wasted inside of allocated memory blocks because of restriction on the allowed sizes of allocated blocks. Allocated memory may be slightly larger than requested memory; this size difference is memory internal to a partition, but not being used.
+    - Advantages of Fixed Partitioning
+        1. Easy to implement
+        2. Little OS overhead
+    - Disadvantages of Fixed Partitioning
+        1. Internal Fragmentation
+        2. External Fragmentation
+        3. Limit process size: Process of size greater than size of partition in Main Memory cannot be accommodated
+        4. Limitation on Degree of Multiprogramming: Number of processes greater than number of partitions in RAM is invalid in Fixed Partitioning.
+    
+- Dynamic or Variable Partitioning Technique (Contiguous)
+    - Initially RAM is empty and partitions are made during the run-time according to process's need instead of partitioning during system configure
+    - Advantages of Variable Partitioning
+        1. No Internal Fragmentation
+        2. No restriction on Degree of Multiprogramming
+        3. No Limitation on the size of the process
+    - Disadvantages of Variable Partitioning
+        1. Difficult Implementation
+        2. External Fragmentation: If two non continuous process like P1(4 MB), P3(5 MB) is completed and a new process of 8 MB comes then this can not be used as in this only contiguous allocation is possible. These spaces are called ***holes***
+
 
 
 
