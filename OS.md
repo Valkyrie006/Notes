@@ -740,4 +740,36 @@ programs in a convenient and efficient manner.
 ### Page replacement Algorithm
 - Since actual physical memory is much smaller than virtual memory, page faults happen. In case of a page fault, the Operating System might have to replace one of the existing pages with the newly needed page. Different page replacement algorithms suggest different ways to decide which page to replace. The target for all algorithms is to reduce the number of page faults.
 1. First In First Out (FIFO)
+    - ***Belady’s anomaly*** - Proves that it is possible to have more page faults when increasing the number of page frames while using the First in First Out (FIFO) page replacement algorithm
+
 ![Page Replacement Algorithm FIFO](/assets/OS/memoryManagement_PageReplacementAlgorithm_FIFO.png)
+
+2. Optimal Page Replacement
+    - Pages are replaced which would not be used for the longest duration of time in the future
+    - Perfect, but not possible in practice as the operating system cannot know future requests
+
+![Page Replacement Algorithm Optimal Page Replacement](/assets/OS/memoryManagement_PageReplacementAlgorithm_OptimalPageReplacement.png)
+
+3. Least Recently Used 
+    - Page will be replaced which is least recently used
+
+# Disk Scheduling (I/O Scheduling)
+- To schedule I/O requests arriving for disk
+- Seek Time: Seek time is the time taken to locate the disk arm to a specified track where the data is to be read or write.
+- Rotational Latency: Rotational Latency is the time taken by the desired sector of disk to rotate into a position so that it can access the read/write heads.
+- Transfer Time: Transfer time is the time to transfer the data. It depends on the rotating speed of the disk and number of bytes to be transferred.
+- Disk Access Time: Seek Time + Rotational Latency + Transfer Time
+- Disk Response Time: Response Time is the average of time spent by a request waiting to perform its I/O operation. Average Response time is the response time of the all requests
+
+### Disk Scheduling Algorithms
+1. First Come First Serve (FCFS) 
+2. Shortest Seek Time First (SSTF)
+3. SCAN
+    - Disk arm moves into a particular direction and services the requests coming in its path and after reaching the end of the disk, it reverses its direction and again services the request arriving in its path. So, this algorithm works like an elevator and hence also known as ***elevator algorithm***
+    - Disadvantages - Long waiting time for requests for locations just visited by disk arm (Dynamic queue)
+4. LOOK
+    - Same as SCAN except for the difference that the disk arm in spite of going to the end of the disk goes only to the last request to be serviced in front of the head and then reverses its direction from there only
+5. CSCAN
+    - Disk arm instead of reversing its direction goes to the other end of the disk and starts servicing the requests from there. So, the disk arm moves in a circular fashion
+6. CLOOK
+    - Same as CSCAN for LOOK
