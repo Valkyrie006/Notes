@@ -111,5 +111,118 @@
 
             4. Many to Many Relationship
                 - When more than one instances of an entity is associated with more than one instances of another entity
-                - For example, a student can be assigned to many projects and a project can be assigned to many students.
+                - For example, a student can be assigned to many projects and a project can be assigned to many students
+    
+### Normalization
+- Database design technique that reduces data redundancy and eliminates undesirable characteristics like Insertion, Update and Deletion Anomalies
+- Types of Anomalies
+    ![Normalization Anomalies Example](/assets/DBMS/Normalization_Anomalies_Example.png)
+    1. Data redundancy
+        - When two or more rows or columns have the same value or repetitive value leading to unnecessary utilization of the memory
+        - Example - There are two students in the above table, 'James' and 'Ritchie Rich', whose records are repetitive when we enter a new CourseID. Hence it repeats the studRegistration, StudName and address attributes
+    2. Insert Anomaly
+        - When some attributes or data items are to be inserted into the database without existence of other attributes
+        - For example, In the Student table, if we want to insert a new courseID, we need to wait until the student enrolled in a course. In this way, it is difficult to insert new record in the table. Hence, it is called insertion anomalies.
+    3. Update Anomalies
+        - When duplicate data is updated only in one place and not in all instances. Hence, it makes our data or table inconsistent state. 
+        - For example, suppose there is a student 'James' who belongs to Student table. If we want to update the course in the Student, we need to update the same in the course table; otherwise, the data can be inconsistent. And it reflects the changes in a table with updated values where some of them will not.
+    4. Delete Anomalies
+        - When some records are lost or deleted from the database table due to the deletion of other records
+        - For example, if we want to remove Trent Bolt from the Student table, it also removes his address, course and other details from the Student table. Therefore, we can say that deleting some attributes can remove other attributes of the database table
+- Functional Dependency 
+    - Relationship that exists between two attributes
+    -  Left side of FD is known as a determinant, right side of FD is known as a dependent
+    - Example: A->B, A is determinant, B is dependent
+    - Types of FD
+        1. Trivial Functional Dependency
+            - X->Y is a trivial functional dependency if Y is a subset of X
+            - Example: A->A
+        2. Non-Trivial Functional Dependency
+            - When A->B holds true where B is not a subset of A
+    - Properties of FD
+        1. Reflexivity: If Y is a subset of X then, X->Y
+        2. Augmentation: If X->Y, then XZ->YZ
+        3. Transitive: If X->Y and Y->Z, then X->Z
+        4. Union: If X->Y and X->Z, then X->YZ
+        5. Decomposition: If X->YZ, then X->Y and X->Z
+        6. PseudoTransitivity: If X->Y and WY->Z, then WX->Z
+        7. Composition: If X->Y and Z->W, then XZ->YW
+- Partial Dependency
+    - Non-prime attribute is functionally dependent on part of a candidate key
+    - Example: let's start with R{ABCD}, and the functional dependencies AB->CD and A->C. The only candidate key for R is AB. C and D are a non-prime attributes. C is functionally dependent on A. A is part of a candidate key. That's a partial dependency.
+- Lossless Decomposition
+    - If there natural join results in original relation R
+    - No loss of information
+- Lossy Decomposition
+    - If there natural join does not result in original relation R
+- Closure of Attribute Set
+    - Set of all those attributes which can be functionally determined from an attribute set
+    - Closure of attribute set {X} is denoted as {X}<sup>+</sup>
+    - Find closure of attribute set
+        1. Add attributes contained in attribute set for which closure is being calculated to result set
+        2. Recursively add attributes to result set which can be functionally determined from attributes already contained in result set
+    - Example
+    ![Closure Example](/assets/DBMS/Normalization_Closure_Example.png)
+    - Finding Super Key
+        - If closure result of an attribute set contains all attributes of relation, then that attribute set is called as a super key of that relation
+        - Example - Closure of attribute A is the entire relation schema. Thus, attribute A is a super key for that relation
+    -Finding Candidate Key
+        - If there exists no subset of an attribute set whose closure contains all attributes of the relation, then that attribute set is called as a candidate key of that relation
+        - Example - No subset of attribute A contains all attributes of the relation. Thus, attribute A is also a candidate key for that relation
+    - ***Prime Key***: Attribute which is part of one of candidate key
+- Types of Normal Form
+    1. First Normal Form (1NF)
+        - Table should not contain any multivalued attribute
+        - How to get 1NF (Different processes)
+            1. Convert 1 table into multiple tables
+            2. Change PK to composite key of multiple columns in same table
+    2. Second Normal Form (2NF)
+        - Rules
+            1. Should be in 1NF
+            2. All non-prime attributes should be fully functional dependent on candidate key[Remove Partial Dependency](For Partial Dependency - LHS of FD is proper subset of CK AND RHS is non-prime attribute)
+        - How to make 2NF (remove Partial Dependency)
+            - Increase table by removing that column causing us trouble
+        - Example: Prime key attributes are StudentID and ProjectID.Non-prime attributes i.e. StudentName and ProjectName should be functionally dependent on part of a candidate key, to be Partial Dependent.StudentName can be determined by StudentID, which makes relation Partial Dependent. ProjectName can be determined by ProjectID, which makes relation Partial Dependent. Therefore, the <StudentProject> relation violates the 2NF.
+        ![2NF Example](/assets/DBMS/Normalization_2NF_Example.png)
+    3. Third Normal Form (3NF)
+        - Rules
+            1. Should be in 2NF
+            2. No non-primary key attribute is transitively dependent on primary key(For each FD, LHS must be CK or SK, OR RHS is a prime attribute)
+        - Example: There is a transitive dependency between Bank_Code_No and Bank, because Bank_Code_No is not the primary key of this relation. To get to the third normal form (3NF), we have to put the bank name in a separate table together with the clearing number to identify it.
+        ![3NF Example](/assets/DBMS/Normalization_Example_3NF.gif)
+    4. Boyce-Codd Normal Form (BCNF)
+        - Rules
+            1. Should be in 3NF
+            2. LHS of FD should be candidate key or super key
+    5. Fourth Normal Form (4NF)
+        - Rules
+            1. Should be in BCNF
+            2. No multi-valued dependency(For a dependency A → B, if for a single value of A, multiple values of B exists, then relation will be a multi-valued dependency)
+    6. Fifth Normal Form (5NF)
+        - Rules
+            1. Should be in 4NF
+            2. Not contains any lossy join dependency and joining should be lossless
+        - How to make 5NF
+            - Common attribute should be CK or SK of either R1 or R2 or both
 
+### Joins
+- Join statement is used to combine data or rows from two or more tables based on a common field between them
+- Types of Joins
+    1. Cross Join (Cartesian product)
+        - When each row of first table is combined with each row from second table
+        - If you add a WHERE clause (if table1 and table2 has a relationship), CROSS JOIN will produce same result as INNER JOIN clause
+        - Syntax
+            ```SQL
+                SELECT * FROM [TABLE1] CROSS JOIN [TABLE2]
+            ```
+            OR
+            ```SQL
+                SELECT * FROM [TABLE1] , [TABLE2]
+            ```
+    2. Natural Join
+        - Natural Join joins two tables based on same attribute name and data-types. The resulting table will contain all the attributes of both the table but keep only one copy of each common column (Join on common column between two tables only)
+        - Syntax
+            ```SQL
+                SELECT * FROM [TABLE1] NATURAL JOIN [TABLE2]
+            ```
+            
