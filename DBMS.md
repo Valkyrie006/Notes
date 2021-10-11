@@ -207,8 +207,8 @@
 
 ### Joins
 - Join statement is used to combine data or rows from two or more tables based on a common field between them
-- Types of Joins
-    1. Cross Join (Cartesian product)
+- Types of Joins ([Types of Joins](https://www.javatpoint.com/types-of-sql-join))
+    1. Cross Join (Cartesian Product/Join)
         - When each row of first table is combined with each row from second table
         - If you add a WHERE clause (if table1 and table2 has a relationship), CROSS JOIN will produce same result as INNER JOIN clause
         - Syntax
@@ -217,7 +217,7 @@
             ```
             OR
             ```SQL
-                SELECT * FROM [TABLE1] , [TABLE2]
+                SELECT * FROM [TABLE1], [TABLE2]
             ```
     2. Natural Join
         - Natural Join joins two tables based on same attribute name and data-types. The resulting table will contain all the attributes of both the table but keep only one copy of each common column (Join on common column between two tables only)
@@ -225,4 +225,22 @@
             ```SQL
                 SELECT * FROM [TABLE1] NATURAL JOIN [TABLE2]
             ```
-            
+        - Example - [Natural Join Example](https://www.w3resource.com/sql/joins/natural-join.php)
+    3. Self Join
+        - Each row of table is joined with itself and all other rows depending on some conditions
+        - Syntax
+            ```SQL
+                SELECT a.column1, b.column2
+                FROM table_name a, table_name b
+                WHERE some_condition;
+            ```
+        - Example - [Self Join Example](https://www.geeksforgeeks.org/sql-join-cartesian-join-self-join/)
+    4. Inner Join
+        - Used to select all matching rows or columns in both tables or as long as defined condition is valid in SQL
+        - Syntax
+            ```SQL
+                SELECT column_1, column_2 
+                FROM table_1 INNER JOIN table_2 
+                ON table_1.column = table_2.column; 
+            ```
+        - Example [Inner Join Example](https://www.javatpoint.com/types-of-sql-join)
