@@ -244,3 +244,310 @@
                 ON table_1.column = table_2.column; 
             ```
         - Example [Inner Join Example](https://www.javatpoint.com/types-of-sql-join)
+    5. Equi Join
+        - A special type of join in which we use only an equality operator
+        - Syntax
+            ```SQL
+                SELECT * FROM tblEmp JOIN tblDept 
+                ON tblEmp.DeptID = tblDept.DeptID;
+            ```
+        - Example - [Equi Join Example](https://www.dotnettricks.com/learn/sqlserver/difference-between-inner-join-and-equi-join-and-natural-join)
+    6. Left Join (Left Outer Join)
+        - Used to retrieve all records from left table (table1) and the matched rows or columns from right table (table2). If both tables do not contain any matched rows or columns, it returns the NULL.
+        - Syntax
+            ```SQL
+                SELECT column_1, column_2, column(s) 
+                FROM table_1 LEFT JOIN table_2 
+                ON table_1.column_name = table_2.column_name; 
+            ```
+        - Example - [Left Join Example](https://www.tutorialspoint.com/sql/sql-left-joins.htm)
+    7. Right Join (Right Outer Join)
+        - Used to retrieve all records from right table (table1) and the matched rows or columns from left table (table2). If both tables do not contain any matched rows or columns, it returns the NULL.
+        - Syntax
+            ```SQL
+                SELECT column_1, column_2, column(s) 
+                FROM table_1 RIGHT JOIN table_2 
+                ON table_1.column_name = table_2.column_name; 
+            ```
+        - Example - [Right Join Example](https://www.javatpoint.com/types-of-sql-join#Full)
+    8. Full Join (Full Outer Join)
+        - It is a combination result set of both LEFT JOIN and RIGHT JOIN. The joined tables return all records from both the tables and if no matches are found in the table, it places NULL.
+        - Syntax
+            ```SQL
+                SELECT column_1, column_2, column(s) 
+                FROM table_1 FULL JOIN table_2 
+                ON table_1.column_name = table_2.column_name;  
+            ```
+        - Example - [Full Join Example](https://www.tutorialspoint.com/sql/sql-full-joins.htm)
+### Relational Algebra
+![Relational Algebra](/assets/DBMS/Relational_Algebra_Operators.png)
+1. Projection (π) [vertical partitioning]
+    - It displays the columns of a relation or table based on the specified attributes
+    - Syntax - π<sub>attribute list</sub>(R)
+    - Unique
+    - SQL equivalent of SELECT(difference is SELECT allows duplicates while projection does not)
+    - Example - [Projection Example](https://www.gatevidyalay.com/projection-operator-relational-algebra-dbms/)
+2. Selection (σ) [horizontal partitioning]
+    - Chooses the subset of tuples from the relation that satisfies the given condition mentioned in the syntax of selection
+    - Syntax - σ<sub>p</sub>(r)
+    - Done before projection
+    - Example - [Selection Example](https://www.geeksforgeeks.org/select-operation-in-relational-algebra/)
+3. Cross/Cartesian Product (✕)
+    - On applying CARTESIAN PRODUCT on two relations that is on two sets of tuples, it will take every tuple one by one from the left set(relation) and will pair it up with all the tuples in the right set(relation).
+    - Cardinality (number of tuples/rows) = m * n [table1 - m rows, table 2 = n rows]
+    - Degree (number of attributes/columns) = a + b [table1 - a columns, table2 - b columns]
+    - SQL equivalent CROSS JOIN
+    - Example - [Cross Product Example](https://www.geeksforgeeks.org/cartesian-product-operation-in-relational-algebra/)
+4. Set Difference (-) [Minus]
+    - Syntax - A – S
+    - Is a relation that basically includes all the tuples that are present in A but not in S
+    - Example - [Set Difference Example](https://www.gatevidyalay.com/set-theory-operators-relational-algebra-dbms/)
+5. Union (U)
+    - Syntax - A U B
+    - Set of all tuples belonging to either R or S or both.
+    - Rule
+        1. Number of columns in both table are same
+        2. Domain(data type) of both table's columns are same 
+    - Duplicates are automatically removed.
+    - Example - [Union Example](https://www.gatevidyalay.com/set-theory-operators-relational-algebra-dbms/)
+6. Division (÷ or /)
+    - Syntax - R1 ÷ R2 
+    - Tuples of R1 associated with all tuples of R2
+    - Example - [Division Example](https://www.tutorialspoint.com/explain-division-operation-in-relational-algebra-dbms)
+### Types of SQL commands
+![Types of SQL commands](/assets/DBMS/Types_of_SQL_Commands.png)
+1. Data Definition Language (DDL)
+    - DDL changes the structure of the table like creating a table, deleting a table, altering a table, etc.
+    - All the command of DDL are auto-committed that means it permanently save all the changes in the database.
+    1. CREATE
+        - Used to create new table in DB
+        - Syntax
+            ```SQL
+                CREATE TABLE TABLE_NAME (COLUMN_NAME DATATYPES[,....]);  
+            ```
+        - Example
+            ```SQL
+                CREATE TABLE EMPLOYEE(Name VARCHAR2(20), Email VARCHAR2(100), DOB DATE);  
+            ```
+    2. DROP
+        - It is used to delete both the structure and record stored in the table
+        - Syntax
+            ```SQL
+                DROP TABLE table_name;    
+            ```
+        - Example
+            ```SQL
+                DROP TABLE EMPLOYEE;
+            ```
+    3. ALTER
+        - It is used to alter the structure of the database. This change could be either to modify the characteristics of an existing attribute or probably to add a new attribute.
+        - Used to Add column(ALTER TABLE <tableName> ADD <columnName> <columnDataType>), Remove Column(ALTER TABLE <tableName> DROP column <columnName>), modify data type(ALTER TABLE <tableName> MODIFY <columnName> <newColumnDataType>), modify data type length, add constraints(ALTER TABLE <tableName> ADD PRIMARY KEY (<columnName>)), remove constraints, rename column/table(ALTER TABLE <tableName> RENAME <originalColumnName> TO <newColumnName>)
+        - Syntax - Add a new column, Modify existing column
+            ```SQL
+                ALTER TABLE table_name ADD column_name COLUMN-definition;  
+                ALTER TABLE table_name MODIFY(column_definitions....);
+            ```
+        - Example
+            ```SQL
+                ALTER TABLE STU_DETAILS ADD(ADDRESS VARCHAR2(20));  
+                ALTER TABLE STU_DETAILS MODIFY (NAME VARCHAR2(20));  
+            ```
+    4. TRUNCATE
+        - It is used to delete all the rows from the table and free the space containing the table (Structure remains the same)
+        - Same as (DELETE FROM <tableName>) but faster, no rollback allowed
+        - Syntax
+            ```SQL
+                TRUNCATE TABLE table_name;     
+            ```
+        - Example
+            ```SQL
+                TRUNCATE TABLE EMPLOYEE;  
+            ```
+2. Data Manipulation Language (DML)
+    - DML commands are used to modify the database. It is responsible for all form of changes in the database.
+    - The command of DML is not auto-committed that means it can't permanently save all the changes in the database. They can be rollback.
+    1. INSERT
+        - Insert data into the row of a table
+        - Syntax
+            ```SQL
+                INSERT INTO TABLE_NAME    
+                (col1, col2, col3,.... col N)  
+                VALUES (value1, value2, value3, .... valueN);       
+            ```
+        - Example
+            ```SQL
+                INSERT INTO javatpoint (Author, Subject) VALUES ("Sonoo", "DBMS");  ;  
+            ```
+    2. UPDATE
+        - Update or modify the value of a column in the table
+        - Syntax
+            ```SQL
+                UPDATE table_name SET [column_name1= value1,...column_nameN = valueN] [WHERE CONDITION]        
+            ```
+        - Example
+            ```SQL
+                UPDATE students    
+                SET User_Name = 'Sonoo'    
+                WHERE Student_Id = '3'   
+            ```
+    3. DELETE
+        - Remove one or more row from a table
+        - Syntax
+            ```SQL
+                DELETE FROM table_name [WHERE condition];       
+            ```
+        - Example
+            ```SQL
+                DELETE FROM javatpoint  
+                WHERE Author="Sonoo";    
+            ```
+3. Data Control Language (DCL)
+    - Used to grant and take back authority from any database user
+    1. GRANT
+        - Used to give user access privileges to a database
+        - Syntax
+            ```SQL
+                GRANT privilege_name
+                ON object_name
+                TO {user_name |PUBLIC |role_name}
+                [WITH GRANT OPTION];      
+            ```
+        - Example
+            ```SQL
+                GRANT SELECT, UPDATE 
+                ON MY_TABLE 
+                TO SOME_USER, ANOTHER_USER;    
+            ```
+    2. REVOKE
+        - Used to take back permissions from the user.
+        - Example
+            ```SQL
+                REVOKE SELECT, UPDATE 
+                ON MY_TABLE 
+                FROM USER1, USER2;    
+            ```
+4. Transaction Control Language (TCL)
+    - Used for transactions.
+    - TCL commands can only use with DML commands like INSERT, DELETE and UPDATE only.
+    - These operations are automatically committed in the database that's why they cannot be used while creating tables or dropping them.
+    1. COMMIT
+        - Used to save all the transactions to the database
+        - Syntax
+            ```SQL
+                COMMIT;     
+            ```
+        - Example
+            ```SQL
+                DELETE FROM CUSTOMERS  
+                WHERE AGE = 25;  
+                COMMIT;    
+            ```
+    2. ROLLBACK
+        - Used to undo transactions that have not already been saved to the database
+        - Syntax
+            ```SQL
+                ROLLBACK;      
+            ```
+        - Example
+            ```SQL
+                DELETE FROM CUSTOMERS  
+                WHERE AGE = 25;  
+                ROLLBACK;    
+            ```
+    3. SAVEPOINT
+        - Used to roll the transaction back to a certain point without rolling back the entire transaction.
+        - Syntax - Creation of savepoint among all transactions, rollback to undo transaction
+            ```SQL
+                SAVEPOINT SAVEPOINT_NAME;     
+                ROLLBACK TO SAVEPOINT_NAME;
+            ```
+5. Data Query Language (DQL)
+    - Fetch the data from the database
+    1. SELECT
+        - Used to select the attribute based on the condition described by WHERE clause
+        - Syntax
+            ```SQL
+                SELECT expressions    
+                FROM TABLES    
+                WHERE conditions;       
+            ```
+        - Example
+            ```SQL
+                SELECT emp_name  
+                FROM employee  
+                WHERE age > 20;    
+            ```
+6. CONSTRAINTS
+    -  Rules that we can apply on the type of data in a table
+    - How to specify constraints? 
+        - We can specify constraints at the time of creating the table using CREATE TABLE statement. 
+        - We can also specify the constraints after creating a table using ALTER TABLE statement.
+        - Syntax
+            ```SQL
+                CREATE TABLE sample_table
+                (
+                column1 data_type(size) constraint_name,
+                column2 data_type(size) constraint_name,
+                column3 data_type(size) constraint_name,
+                ....
+                );
+            ``` 
+    1. NOT NULL
+        - If a column is specified as NOT NULL then we will not be able to store null in this particular column any more.
+        - Syntax
+            ```SQL
+                CREATE TABLE Student
+                (
+                ID int(6) NOT NULL
+                );
+            ```
+    2. UNIQUE
+        - This constraint when specified with a column, tells that all the values in the column must be unique. That is, the values in any row of a column must not be repeated.
+        - Syntax
+            ```SQL
+                CREATE TABLE Student
+                (
+                ID int(6) NOT NULL UNIQUE
+                );
+            ```
+    3. PRIMARY KEY
+        - A primary key is a field which can uniquely identify each row in a table.
+        - This is combination of NOT NULL and UNIQUE constraints. 
+        - A table can have only one field as primary key.
+        - Syntax
+            ```SQL
+                CREATE TABLE Student
+                (
+                ID int(6) NOT NULL UNIQUE
+                );
+            ```
+    4. FOREIGN KEY
+        - A Foreign key is a field which can uniquely identify each row in a another table.
+        - Syntax
+            ```SQL
+                CREATE TABLE Orders
+                (
+                O_ID int NOT NULL,
+                C_ID int,
+                PRIMARY KEY (O_ID),
+                FOREIGN KEY (C_ID) REFERENCES Customers(C_ID)
+                )
+            ```
+    5. CHECK
+        - This constraint helps to validate the values of a column to meet a particular condition.
+        - Syntax
+            ```SQL
+                CREATE TABLE Student
+                (
+                AGE int NOT NULL CHECK (AGE >= 18)
+                );
+            ```
+    6. DEFAULT
+        - This constraint specifies a default value for the column when no value is specified by the user.
+        - Syntax
+            ```SQL
+                CREATE TABLE Student
+                (
+                AGE int DEFAULT 18
+                );
+            ```
